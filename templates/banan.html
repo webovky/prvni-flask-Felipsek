@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+
+{% block obsah %}
+
+<h2>Formulář</h2>
+<form action="" method= "POST">
+    <input type="text" name = "q">
+     <input type="password" name = "heslo">
+    <input type="submit" value = "vyslat">
+</form>
+
+
+
+
+
+<h1>Banan</h1>
+<h2>miluju banan</h2>
+<p> <img src="{{ url_for('static' ,filename = 'banan.png')}}" alt=""></p>
+{% endblock obsah %}

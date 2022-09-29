@@ -1,5 +1,5 @@
 body {
-  background-color: #eeeeee;
+  background-color: rgb(50, 182, 205);
   padding-left: 1em;
   padding-right: 1em;
   margin-left: 90px;
@@ -8,6 +8,14 @@ body {
 h1, h2, h3 {
   clear: both;
   margin-top: 3em;
+}
+
+h1 {
+  color: green;
+}
+
+h2 {
+  color: blue;
 }
 
 h1 a {
@@ -26,13 +34,13 @@ nav ul {
     }
     nav ul li a {
       display: block;
-      color: white;
-      background-color: #324b79;
+      color: rgb(199, 18, 48);
+      background-color: #6fd80d;
       border-radius: 25px 50px 0px;
       padding: 1ex 2ex; }
     nav ul li a:hover {
       color: #324b72;
-      background-color: white;
+      background-color: rgb(175, 9, 9);
     }
   nav img {
     float:left;

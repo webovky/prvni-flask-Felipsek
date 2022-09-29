@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Flask, render_template, request, redirect, url_for, session
 import functools
 
@@ -35,6 +36,11 @@ def info():
 @app.route("/abc/")
 def abc():
     return render_template("abc.html", slova=slova)
+
+@app.route("/banan/", methods=["GET", "POST"])
+def banan():
+    return render_template("banan.html")
+
 
 
 @app.route("/text/")
