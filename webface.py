@@ -1,5 +1,5 @@
 from decimal import DivisionByZero
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import functools
 
 # from werkzeug.security import generate_password_hash, check_password_hash
@@ -42,6 +42,10 @@ def abc():
 
 @app.route("/malina/", methods=['GET', 'POST'])
 def malina():
+    if 'uzivatel' not in session:
+        flash("Nejsi prihlasen blazne")
+        return redirect(url_for("login"))
+
     hmotnost = request.args.get('hmotnost')
     vyska = request.args.get('vyska')
 
@@ -57,3 +61,29 @@ def malina():
         bmi = None
 
     return render_template('malina.html', bmi=bmi)
+
+
+@app.route("/login/", methods=['GET'])
+def login():
+    jmeno = request.args.get('jmeno')
+    heslo = request.args.get('heslo')
+    print(jmeno,heslo)
+    return render_template('login.html')
+
+@app.route("/login/", methods=['POST'])
+def login_post():
+    jmeno = request.form.get('jmeno')
+    heslo = request.form.get('heslo')
+    if jmeno == "marek" and heslo == "lokomotiva":
+        session["uzivatel"] = jmeno
+
+
+        
+    return redirect(url_for('login'))
+
+
+@app.route("/logout/", methods=['GET','POST'])
+def logout():
+    session.pop("uzivatel", None)
+    return redirect(url_for('index'))
+

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{%block title%}Login{%endblock%}
+
+{% block obsah %}
+
+<h1>login</h1>
+
+<p>zde se můžete přihlásit</p>
+
+<form action="" method="post">
+    jméno: <br>
+    <input type="text" name="jmeno"> <br>
+    heslo: <br>
+    <input type="password" name="heslo"> <br>
+    <br>
+    <input type="submit" value="Přihlas mě!">
+
+</form>
+
+{% endblock obsah %}
