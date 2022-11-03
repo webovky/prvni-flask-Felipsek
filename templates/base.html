@@ -24,8 +24,8 @@
   Hruza, nejsi prihlasen ! <a href="{{url_for('login')}}">Prhls</a>
 {% endif %}
 </p>
-{% for message in get_flashed_messages()  %}
-<p class="flash">{{message}}</p>
+{% for category, message in get_flashed_messages(with_categories = true)  %}
+<p class="flash" {{category}}>{{message}}</p>
 {% endfor %}
 
 

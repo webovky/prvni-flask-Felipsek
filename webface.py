@@ -43,7 +43,7 @@ def abc():
 @app.route("/malina/", methods=['GET', 'POST'])
 def malina():
     if 'uzivatel' not in session:
-        flash("Nejsi prihlasen blazne")
+        flash("Nejsi prihlasen blazne", "error")
         return redirect(url_for("login"))
 
     hmotnost = request.args.get('hmotnost')
