@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+
+{% block obsah %}
+
+<h1>Malina a BMI</h1>
+
+<h2>formulář</h2>
+<form action="" method="GET">
+    <p>Hmotnost:<br>
+      <input type="text" name="hmotnost" placeholder="hmotnost v kg"
+      value="{{ request.args.get('hmotnost') or '' }}">kg
+    </p>
+    <p>Výška: <br>
+      <input type="text" name="vyska" placeholder="výška v cm"
+      value="{{ request.args.get('vyska') or '' }}">cm
+    </p>
+    <p><input type="submit" value="Vypočítej mi to!"></p>
+</form>
+{% if bmi != none  %}
+<p>BMI={{bmi}}</p>
+
+{% if bmi < 18.5%}
+<p>0 až 18.5 podváha</p>
+{% elif bmi < 25%}
+<p>18.5 až 25 normalni vaha </p>
+{% elif bmi < 30%}
+<p>25 až 30 nadvaha </p>
+{% elif bmi < 35%}
+<p>30 až 35 mirna obezita </p>
+{% elif bmi < 40%}
+<p>35 až 40 obezita </p>
+{% elif bmi > 40%}
+<p> více než 40 extrem obezita </p>
+{% endif %}
+
+
+{% else %}
+<p>je treba zadat dve nenulova cisla!</p>
+{% endif %}
+
+
+<p><img src="{{ url_for('static', filename='img/maliny.jpg') }}" alt=""></p>
+
+{% for i in range(7) %}
+<p>Maliny jsou nejlepší!</p>
+{% endfor %}
+
+
+{% endblock obsah %}

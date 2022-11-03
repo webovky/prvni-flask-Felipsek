@@ -1,4 +1,4 @@
-from crypt import methods
+from decimal import DivisionByZero
 from flask import Flask, render_template, request, redirect, url_for, session
 import functools
 
@@ -37,18 +37,23 @@ def info():
 def abc():
     return render_template("abc.html", slova=slova)
 
-@app.route("/banan/", methods=["GET", "POST"])
-def banan():
-    return render_template("banan.html")
 
 
 
-@app.route("/text/")
-def text():
-    return """
+@app.route("/malina/", methods=['GET', 'POST'])
+def malina():
+    hmotnost = request.args.get('hmotnost')
+    vyska = request.args.get('vyska')
 
-<h1>Text</h1>
+    print(hmotnost, vyska)    
+    if hmotnost and vyska:
+        try:
+                hmotnost = float(hmotnost)
+                vyska=float(vyska)
+                bmi = hmotnost/(0.01*vyska)**2
+        except (DivisionByZero, ValueError):
+                bmi = None
+    else:
+        bmi = None
 
-<p>toto je text</p>
-
-"""
+    return render_template('malina.html', bmi=bmi)
