@@ -1,5 +1,5 @@
 body {
-  background-color: #eeeeee;
+  background-color: lightblue;
   padding-left: 1em;
   padding-right: 1em;
   margin-left: 90px;
@@ -45,7 +45,7 @@ footer {
   background-color: #ecc8f0; }
 
 .login {
-  display: inline-block;
+  display: block;
   float: right;
   width: 30%;
   border: orange solid 2px;
@@ -58,6 +58,25 @@ footer {
 .even {
     background-color: lightblue;
 }
+
+.flash{
+  display: block;
+  position: absolute;
+  left: 40%;
+  top: 0%;
+  width: 40%;
+  border: orange solid 2px;
+  padding: 2ex;
+  border-radius: 20px;
+  background-color: white;
+  font-weight: bold;
+}
+.error{
+  background-color: red;
+  color: black;
+}
+
+
 
 
 /*# sourceMappingURL=styles.css.map */

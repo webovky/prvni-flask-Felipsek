@@ -35,6 +35,9 @@ def info():
 
 @app.route("/abc/")
 def abc():
+    if 'uzivatel' not in session:
+        flash("Nejsi prihlasen blazne", "error")
+        return redirect(url_for("login", page = request.full_path))
     return render_template("abc.html", slova=slova)
 
 
@@ -44,7 +47,7 @@ def abc():
 def malina():
     if 'uzivatel' not in session:
         flash("Nejsi prihlasen blazne", "error")
-        return redirect(url_for("login"))
+        return redirect(url_for("login", page = request.full_path))
 
     hmotnost = request.args.get('hmotnost')
     vyska = request.args.get('vyska')
@@ -74,11 +77,16 @@ def login():
 def login_post():
     jmeno = request.form.get('jmeno')
     heslo = request.form.get('heslo')
+    page = request.args.get("page")
     if jmeno == "marek" and heslo == "lokomotiva":
+        flash("jsi přihlašen", "message")
         session["uzivatel"] = jmeno
-
-
-        
+        if page:
+            return redirect(page)   
+    else:
+        flash("nespravne udaje", "error")
+    if page:
+        return redirect(url_for("login", page= page)) 
     return redirect(url_for('login'))
 
 

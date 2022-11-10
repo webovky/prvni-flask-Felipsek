@@ -25,7 +25,9 @@
 {% endif %}
 </p>
 {% for category, message in get_flashed_messages(with_categories = true)  %}
-<p class="flash" {{category}}>{{message}}</p>
+<p class="flash {{category}}">
+<button class ="hide">X</button>
+{{message}}</p>
 {% endfor %}
 
 
@@ -78,6 +80,20 @@ Užitečné odkazy:
 
 
 
+<script>
+function hide(){
+  this.parentElement.style.display = "none";
 
+}
+
+var tlacitka = document.getElementsByClassName("hide");
+for (var i = 0; i<tlacitka.length; i++ ){
+  tlacitka[i].onclick =hide;
+}
+
+
+
+
+</script>
 </body>
 </html>
