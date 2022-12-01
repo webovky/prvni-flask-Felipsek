@@ -2,7 +2,8 @@ from decimal import DivisionByZero
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import functools
 from mysqlite import SQLite
-# from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = b"totoj e zceLa n@@@hodny retezec nejlep os.urandom(24)"
@@ -86,7 +87,7 @@ def login_post():
         ans = cur.fetchall()
       
 
-    if ans and ans[0][0]== heslo:
+    if ans and check_password_hash(ans[0][0], heslo):
         flash("jsi přihlašen", "message")
         session["uzivatel"] = jmeno
         if page:
@@ -102,4 +103,35 @@ def login_post():
 def logout():
     session.pop("uzivatel", None)
     return redirect(url_for('index'))
+
+@app.route("/registrace/", methods=['GET'])
+def registrace():
+    return render_template('registrace.html')
+
+@app.route("/registrace/", methods=['POST'])
+def registrace_post():
+    jmeno = request.form.get('jmeno')
+    heslo = request.form.get('heslo')
+    heslo2 = request.form.get('heslo2')
+    
+    if not (jmeno and heslo and heslo2):
+        flash('Je nutné vyplnit všechna políčka',"error")
+
+    if heslo != heslo2:
+        flash('Hesla nejsou stejná',"error")
+    
+    heslohash = generate_password_hash(heslo)
+    try:
+        with SQLite("data.db") as cur:
+            cur.execute( " INSERT INTO user (login,passwd) VALUES (?,?) ", [jmeno,heslohash] )
+            ans = cur.fetchall()
+            flash("přihlášen")
+            flash("Zaregistrováno")
+            session["uzivatel"] = jmeno
+            return redirect(url_for('index'))
+    except sqlite3.IntegrityError:
+        flash(f"Jméno {jmeno} je již zabrané ")   
+
+
+    return redirect(url_for('registrace'))
 
