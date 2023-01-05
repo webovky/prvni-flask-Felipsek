@@ -5,5 +5,8 @@
   "emmet.includeLanguages": {
     "jinja-html": "html",
     "vue-html": "html"
-  }
+  },
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "master"
+  ]
 }
