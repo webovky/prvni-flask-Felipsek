@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{%block title%}Zkracovač{%endblock%}
+
+{% block obsah %}
+
+<h1>Zkracovač URL</h1>
+
+<form method="post"></form>
+    <p class="url">
+    Zadej URL: 
+    <input type ="text"name ="url">
+    <button type="submit">Zkrátit</button>
+    </p>
+{% endblock obsah %}

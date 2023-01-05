@@ -4,6 +4,8 @@ import functools
 from mysqlite import SQLite
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+import random
+import string
 
 app = Flask(__name__)
 app.secret_key = b"totoj e zceLa n@@@hodny retezec nejlep os.urandom(24)"
@@ -29,6 +31,20 @@ def prihlasit(function):
 @app.route("/", methods=["GET"])
 def index():
     return render_template("base.html")
+
+@app.route("/zkracovac/")
+def zkracovac():
+    return render_template("zkracovac.html")
+
+@app.route("/zkracovac/", methods=["POST"])
+def zkracovac_post():
+    url = request.form.get("url")
+    zkratka = "".join(random.choices(string.ascii_uppercase +string.digits, k=5))
+    with SQLite("data.db") as cur:
+            cur.execute( " INSERT INTO adresy (zkratka,adresa) VALUES (?,?) ", [zkratka,url] )
+            
+    return redirect(url_for("zkracovac"))
+
 
 
 @app.route("/info/")
