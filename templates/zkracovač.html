@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{%block title%}Zkracovač{%endblock%}
+
+{% block obsah %}
+
+<h1>Zkracovač URL</h1>
+
+{% if new %}
+<p>Vytvořena nová zkratka:<a href="{{new}}">{{ new }}   </a></p>
+
+{% endif %}
+
+<form method="post">
+<p class="url">
+    Zadejte URL: <br>
+     <input type="text" name="url">
+     <button type="submit">Zkrátit</button>
+    </p>
+</form>
+<h2>Seznam uložených zkratek</h2>
+<ul>
+{%for zkratka, adresa in zkratky%}
+    <li><a href="{{url_for('dezkracovac', zkratka = zkratka)}}">{{zkratka}}</a></li>
+    <li><a href="{{adresa}}">{{adresa}}</a></li>
+</ul>
+{%endfor%}
+{% endblock obsah %}

@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import random
 import string
+import re
 
 app = Flask(__name__)
 app.secret_key = b"totoj e zceLa n@@@hodny retezec nejlep os.urandom(24)"
@@ -15,7 +16,9 @@ app.secret_key = b"x6\x87j@\xd3\x88\x0e8\xe8pM\x13\r\xafa\x8b\xdbp\x8a\x1f\xd41\
 slova = ("Super", "Perfekt", "Úža", "Flask")
 
 
-
+@app.route("/", methods=["GET"])
+def index():
+    return render_template("base.html")
 
 def prihlasit(function):
     @functools.wraps(function)
@@ -28,22 +31,57 @@ def prihlasit(function):
     return wrapper
 
 
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("base.html")
+@app.route("/zkracovač/",  methods=["GET"])
+def zkracovač():
+    new = request.args.get("new")
+    if "uzivatel" in session:
+        with SQLite("data.db") as cur:
+            res = cur.execute("SELECT zkratka, adresa FROM adresy Where user=?", [session["uzivatel"]])
+            zkratky = res.fetchall()
+            if not zkratky:
+                zkratky = []
+    else:
+        zkratky = []
+    return render_template("zkracovač.html", new=new, zkratky=zkratky)
 
-@app.route("/zkracovac/")
-def zkracovac():
-    return render_template("zkracovac.html")
 
-@app.route("/zkracovac/", methods=["POST"])
-def zkracovac_post():
+
+@app.route("/zkracovač/", methods=["POST"])
+def zkracovač_post():
     url = request.form.get("url")
-    zkratka = "".join(random.choices(string.ascii_uppercase +string.digits, k=5))
+    if url and re.match("https?://.+", url):
+        zkratka = ''.join(random.choices(string.ascii_uppercase +
+                                string.digits, k=5))
+
+        with SQLite("data.db") as cur:
+            if "uzivatel" in session:
+                cur.execute("INSERT INTO adresy (zkratka, adresa, user) VALUES (?, ?, ?)", [zkratka, url, session["uzivatel"]])
+                flash("Adresa uložena")
+            else:
+                cur.execute("INSERT INTO adresy (zkratka, adresa) VALUES (?, ?)", [zkratka, url])
+            return redirect(url_for("zkracovač", new=zkratka))
+    else:
+        flash("To, co jsi zadal není adresa webové stránky!")
+
+
+    return redirect(url_for("zkracovač",))
+
+@app.route("/zkracovač/<zkratka>",  methods=["GET"])
+def dezkracovac(zkratka):
+    print(zkratka)
     with SQLite("data.db") as cur:
-            cur.execute( " INSERT INTO adresy (zkratka,adresa) VALUES (?,?) ", [zkratka,url] )
-            
-    return redirect(url_for("zkracovac"))
+        cur.execute("SELECT adresa FROM adresy WHERE zkratka=? ;", [zkratka])
+        odpoved = cur.fetchone()
+        print(type(odpoved))
+        if odpoved:
+            print(odpoved[0])
+            return redirect(odpoved[0])
+
+        else:
+            flash("Toto ({}) není korektní ZKRATKA".format(zkratka))
+
+
+    return redirect(url_for("zkracovač"))
 
 
 
